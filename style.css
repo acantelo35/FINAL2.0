@@ -1,68 +1,61 @@
-/* General Styles */
+/* General styles */
 body {
   font-family: Arial, sans-serif;
-  text-align: center;
-  background-color: #f4f4f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
   margin: 0;
-  padding: 20px;
+  background-color: #f4f4f4;
 }
 
 #app {
-  max-width: 400px;
-  margin: 0 auto;
+  text-align: center;
 }
 
 h1 {
-  font-size: 2rem;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
-/* Color Selector Section */
 .color-selectors {
-  margin: 15px 0;
-}
-
-.color-selectors label {
-  font-size: 1rem;
-  margin-right: 5px;
+  margin-bottom: 20px;
 }
 
 .color-selectors input {
-  margin-right: 20px;
+  margin-left: 10px;
 }
 
-/* Game Board Styles */
 .game-board {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 5px;
-  margin: 20px 0;
+  grid-template-columns: repeat(3, 100px);
+  grid-gap: 5px;
+  justify-content: center;
 }
 
 .cell {
   width: 100px;
   height: 100px;
+  background-color: #fff;
+  border: 1px solid #000;
   display: flex;
-  align-items: center;
   justify-content: center;
-  font-size: 2rem;
-  background-color: #ffffff;
-  border: 2px solid #000000;
+  align-items: center;
+  font-size: 2em;
   cursor: pointer;
 }
 
-.cell.taken {
-  cursor: not-allowed;
+.game-info {
+  margin-top: 20px;
 }
 
-/* Status and Reset Button */
-#status {
-  font-size: 1.2rem;
-  margin: 10px 0;
-}
-
-#reset {
+button {
   padding: 10px 20px;
-  font-size: 1rem;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
   cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
 }
