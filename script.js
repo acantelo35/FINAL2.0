@@ -1,92 +1,81 @@
-// Game state
+// Get all elements
 const cells = document.querySelectorAll('.cell');
 const statusText = document.getElementById('status');
 const resetButton = document.getElementById('reset');
-const colorXInput = document.getElementById('color-x');
-const colorOInput = document.getElementById('color-o');
+const colorX = document.getElementById('color-x');
+const colorO = document.getElementById('color-o');
 
+// Game variables
 let currentPlayer = 'X';
+let gameBoard = ['', '', '', '', '', '', '', '', '']; // Track the board state
 let gameActive = true;
-let board = ['', '', '', '', '', '', '', '', ''];
-let colorX = colorXInput.value;
-let colorO = colorOInput.value;
+let xColor = colorX.value;
+let oColor = colorO.value;
 
-// Winning conditions
-const winConditions = [
-  [0, 1, 2],
-  [3, 4, 5],
-  [6, 7, 8],
-  [0, 3, 6],
-  [1, 4, 7],
-  [2, 5, 8],
-  [0, 4, 8],
-  [2, 4, 6]
-];
+// Cell click event handler
+function cellClick(e) {
+  const index = e.target.dataset.index;
 
-// Update game status
-function updateStatus(message) {
-  statusText.textContent = message;
+  if (gameBoard[index] !== '' || !gameActive) return;
+
+  gameBoard[index] = currentPlayer;
+  e.target.textContent = currentPlayer;
+  e.target.style.color = currentPlayer === 'X' ? xColor : oColor;
+
+  checkGameStatus();
+  currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+  statusText.textContent = `Player ${currentPlayer}'s turn`;
 }
 
-// Check for win or draw
+// Check the game status (win or draw)
 function checkGameStatus() {
-  for (let condition of winConditions) {
-    const [a, b, c] = condition;
-    if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+  const winPatterns = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+
+  for (let pattern of winPatterns) {
+    const [a, b, c] = pattern;
+    if (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
       gameActive = false;
-      updateStatus(`Player ${currentPlayer} wins!`);
+      statusText.textContent = `Player ${gameBoard[a]} wins!`;
       return;
     }
   }
 
-  if (!board.includes('')) {
+  if (!gameBoard.includes('')) {
     gameActive = false;
-    updateStatus('It\'s a draw!');
-    return;
+    statusText.textContent = "It's a draw!";
   }
-
-  currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-  updateStatus(`Player ${currentPlayer}'s turn`);
 }
 
-// Cell click event handler
-function handleCellClick(event) {
-  const index = event.target.getAttribute('data-index');
-
-  if (!gameActive || board[index]) {
-    return;
-  }
-
-  board[index] = currentPlayer;
-  event.target.textContent = currentPlayer;
-  event.target.style.color = currentPlayer === 'X' ? colorX : colorO;
-  event.target.classList.add('taken');
-
-  checkGameStatus();
-}
-
-// Reset game
+// Reset the game
 function resetGame() {
-  currentPlayer = 'X';
+  gameBoard = ['', '', '', '', '', '', '', '', ''];
   gameActive = true;
-  board = ['', '', '', '', '', '', '', '', ''];
+  currentPlayer = 'X';
+  statusText.textContent = "Player X's turn";
+  
   cells.forEach(cell => {
     cell.textContent = '';
-    cell.style.color = '';
-    cell.classList.remove('taken');
+    cell.style.color = 'black';
   });
-  updateStatus('Player X\'s turn');
 }
 
-// Update colors when changed
-colorXInput.addEventListener('change', () => {
-  colorX = colorXInput.value;
-});
-
-colorOInput.addEventListener('change', () => {
-  colorO = colorOInput.value;
-});
-
-// Attach event listeners
-cells.forEach(cell => cell.addEventListener('click', handleCellClick));
+// Event listeners
+cells.forEach(cell => cell.addEventListener('click', cellClick));
 resetButton.addEventListener('click', resetGame);
+
+// Color change event listeners
+colorX.addEventListener('input', () => {
+  xColor = colorX.value;
+});
+colorO.addEventListener('input', () => {
+  oColor = colorO.value;
+});
